@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import UserContext from './ApplicationContext/AppContext';
+import { Films } from './components/Films/Films';
+import { GET_USER_NAME } from './gql/gql';
 
-function App() {
+export const App = () => {
+  const [user, setUser] = useState({ user: '' });
+  const { loading, error, data } = useQuery(GET_USER_NAME);
+  useEffect(() => {
+    async function getUser() {}
+    if (!loading) {
+      setUser(data);
+    }
+    getUser();
+  }, [data]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={user}>
+      <div className='App'>
+        <Films />
+      </div>
+    </UserContext.Provider>
   );
-}
-
-export default App;
+};
